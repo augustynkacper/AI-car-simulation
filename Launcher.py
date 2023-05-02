@@ -5,7 +5,7 @@ from Intro import Intro
 
 pygame.init()
 
-WIDTH, HEIGHT = 800, 600
+WIDTH, HEIGHT = 1100, 800
 win = pygame.display.set_mode((WIDTH, HEIGHT))
 
 clock = pygame.time.Clock()
