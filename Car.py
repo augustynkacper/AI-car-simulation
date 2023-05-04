@@ -1,7 +1,8 @@
 import math
 import pygame
+from datetime import datetime
 
-ROTATE_VEL = 3
+ROTATE_VEL = 5
 VELOCITY = 5
 BRAKE_DECR = 1
 LOWEST_BRAKE_VEL = 2
@@ -18,7 +19,10 @@ class Car:
         self.img = pygame.transform.rotate(
             pygame.transform.scale(
                 pygame.image.load("car.png").convert_alpha(), (self.width,self.length)
-            ), -90 )        
+            ), -90 ) 
+
+        self.distance = 0   
+        self.start = datetime.now()    
 
     def rotate(self, a):
         self.angle += ROTATE_VEL * a
@@ -37,8 +41,12 @@ class Car:
         self.vel = min(VELOCITY, self.vel)
 
     def move(self):
-        self.y += -math.sin(self.angle*math.pi/180) * self.vel
+        self.y -= math.sin(self.angle*math.pi/180) * self.vel
         self.x += math.cos(self.angle*math.pi/180) * self.vel
+
+        self.distance += self.vel
+
+    
 
     # returns car collision points in order:
     # left_side, left_top, front, right_top, right_side
@@ -83,7 +91,7 @@ class Car:
         delta = 20
 
         a = math.degrees(math.atan(self.width/self.length))
-        for i, alpha in enumerate([90, a, 0, -90, -a]):
+        for i, alpha in enumerate([90, a, 0, -a, -90]):
             x, y = collision_points[i]
             angle = self.angle + alpha
             l = 0
@@ -93,11 +101,16 @@ class Car:
                 y = self.y - math.sin(angle*math.pi/180) * l
             res.append((x,y))
         
-        dist = [math.dist(res[i], collision_points[i]) for i in range(len(res))]
+        #dist = [math.dist(res[i], collision_points[i]) for i in range(len(res))]
+        dist = [math.dist(res[i], (self.x,self.y)) for i in range(len(res))]
         return dist 
 
-    def get_neural_input(self, track):
-        distances = self.get_distances(track)
+    def get_reward(self):
+        delta = self.start - datetime.now()
+
+        tm = delta.seconds + delta.microseconds
+        
+        return self.distance/20
 
         
 

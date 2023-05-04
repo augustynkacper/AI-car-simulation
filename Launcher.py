@@ -39,5 +39,5 @@ if __name__ == "__main__":
 
     car_simulation = AICar(WIDTH, HEIGHT, win)
 
-    p.run(car_simulation.run_simulation, 50)
-    
+    p.run(car_simulation.run_simulation, 20)
+
