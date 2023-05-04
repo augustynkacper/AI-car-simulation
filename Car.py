@@ -10,7 +10,7 @@ class Car:
     vel = VELOCITY
     angle = 270
 
-    def __init__(self, x, y, win):
+    def __init__(self, x, y):
         self.x = x
         self.y = y
         self.width = 50
@@ -40,19 +40,48 @@ class Car:
         self.y += -math.sin(self.angle*math.pi/180) * self.vel
         self.x += math.cos(self.angle*math.pi/180) * self.vel
 
-    def collision(self, track):
+    def get_points(self):
         front_center_x = self.x + math.cos(self.angle*math.pi/180) * self.length//2
         front_center_y = self.y - math.sin(self.angle*math.pi/180) * self.length//2
 
-        track_color = track.get_at((int(front_center_x), int(front_center_y)))
+        angle_right_side = self.angle-90 if self.angle > 90 else 270+self.angle 
+        right_side_x = self.x + + math.cos(angle_right_side*math.pi/180) * self.width//2
+        right_side_y = self.y - math.sin(angle_right_side*math.pi/180) * self.width//2
+
+        left_side_x = self.x + (self.x-right_side_x)
+        left_side_y = self.y + (self.y-right_side_y)
+
+        _x = (front_center_x+right_side_x)/2
+        _y = (front_center_y+right_side_y)/2
+
+        right_top_x = _x + (_x-self.x)
+        right_top_y = _y + (_y-self.y)
+
+        left_top_x = front_center_x + (front_center_x-right_top_x)
+        left_top_y = front_center_y + (front_center_y-right_top_y)
+
+        res = []
+        res.append((front_center_x, front_center_y))
+        res.append((right_top_x, right_top_y))
+        res.append((left_top_x, left_top_y))
+        res.append((right_side_x, right_side_y))
+        res.append((left_side_x, left_side_y))
+
+        return res
+
+
+    def collision(self, track):
+        points = self.get_points()
+        
         color = (55, 125, 33, 255)
         delta = 10
         flag = True
 
-        for i in range(3) :
-            if not(color[i]+delta >= track_color[i] >=color[i]-delta):
-                flag = False
-
+        for point in points:
+            track_color = track.get_at((int(point[0]), int(point[1])))
+            for i in range(3) :
+                if not(color[i]+delta >= track_color[i] >=color[i]-delta):
+                    flag = False
         return flag
 
     def finished(self, line):

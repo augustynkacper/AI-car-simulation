@@ -12,7 +12,7 @@ class Player(GameState):
 
     def __init__(self, W, H, win):
         super().__init__(W, H, win)
-        self.car = Car(self.START_POS[0], self.START_POS[1], self.win)
+        self.car = Car(self.START_POS[0], self.START_POS[1])
         self.track = pygame.transform.scale(pygame.image.load("track.png"), (W,H))
         self.lost = False
         self.font = pygame.font.Font(None, 80)
@@ -56,6 +56,8 @@ class Player(GameState):
         rotated_surf = pygame.transform.rotate(car_surf, self.car.angle)
         self.win.blit(rotated_surf, (self.car.x-rotated_surf.get_width()//2, self.car.y-rotated_surf.get_height()//2))
         self.draw_time()
+        for point in self.car.get_points():
+            pygame.draw.circle(self.win, (0,0,0), (point[0], point[1]), 3)
         pygame.display.update()
 
     def finished(self):
@@ -104,7 +106,6 @@ class Player(GameState):
         if not keys[pygame.K_DOWN]: self.car.reset_vel()
 
         self.car.move()
-
         if self.car.collision(self.track):  self.lost = True
 
         if self.car.finished(self.FINISH_LINE):
