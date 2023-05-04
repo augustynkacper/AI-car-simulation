@@ -6,7 +6,7 @@ from Car import Car
 
 class AICar(GameState):
 
-    START_POS = 70, 370
+    START_POS = (88, 300)
     FINISH_LINE = [(17, 457), (159, 457)]
 
     def __init__(self, W, H, win):
@@ -71,6 +71,8 @@ class AICar(GameState):
                     run = False 
                     pygame.quit()
                     exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    print(pygame.mouse.get_pos())
                     
             for i, car in enumerate(self.cars):
                 output = nets[i].activate(car.get_distances(self.track))
@@ -80,9 +82,9 @@ class AICar(GameState):
                 # 2 - brake
                 x = output.index(max(output))
                 if x == 0:
-                    car.rotate(-1)
-                elif x == 1:
                     car.rotate(1)
+                elif x == 1:
+                    car.rotate(-1)
              
             for i, car in enumerate(self.cars):
                 car.move()

@@ -2,7 +2,7 @@ import math
 import pygame
 from datetime import datetime
 
-ROTATE_VEL = 5
+ROTATE_VEL = 6
 VELOCITY = 5
 BRAKE_DECR = 1
 LOWEST_BRAKE_VEL = 2
@@ -11,11 +11,12 @@ class Car:
     vel = VELOCITY
     angle = 270
 
-    def __init__(self, x, y):
+    def __init__(self, x, y, angle=270):
         self.x = x
         self.y = y
         self.width = 50
         self.length = 80
+        self.angle = angle
         self.img = pygame.transform.rotate(
             pygame.transform.scale(
                 pygame.image.load("car.png").convert_alpha(), (self.width,self.length)
@@ -103,6 +104,8 @@ class Car:
         
         #dist = [math.dist(res[i], collision_points[i]) for i in range(len(res))]
         dist = [math.dist(res[i], (self.x,self.y)) for i in range(len(res))]
+        #dist[0] = dist[0] * 10
+        #dist[4] = dist[4] * 10
         return dist 
 
     def get_reward(self):
@@ -110,7 +113,7 @@ class Car:
 
         tm = delta.seconds + delta.microseconds
         
-        return self.distance/20
+        return self.distance/50.0
 
         
 

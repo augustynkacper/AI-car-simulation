@@ -7,14 +7,14 @@ import copy
 
 class Player(GameState):
 
-    START_POS = 70, 370
+    START_POS = (88, 300)
     FINISH_LINE = [(17, 457), (159, 457)]
 
     def __init__(self, W, H, win):
         super().__init__(W, H, win)
         type="player"
         self.car = Car(self.START_POS[0], self.START_POS[1])
-        self.track = pygame.transform.scale(pygame.image.load("track.png"), (W,H))
+        self.track = pygame.transform.scale(pygame.image.load("track3.png"), (W,H))
         self.lost = False
         self.font = pygame.font.Font(None, 80)
         self.start = datetime.now()
