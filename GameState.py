@@ -7,6 +7,7 @@ class GameState():
         self.WIDTH = W
         self.HEIGHT = H 
         self.win = win
+        self.type = "_"
 
     def run(self):
         pass

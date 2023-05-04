@@ -2,11 +2,13 @@ import pygame
 import sys
 from Player import Player
 from GameState import GameState
+from AICar import AICar
 
 class Intro(GameState):
 
     def __init__(self, W, H, win):
         super().__init__(W, H, win)
+        type="intro"
         self.font = pygame.font.Font(None, 36)
 
     def display_text(self):
@@ -45,6 +47,8 @@ class Intro(GameState):
                 pos = pygame.mouse.get_pos()
                 if pos[0] < self.WIDTH//2:
                     return Player(self.WIDTH, self.HEIGHT, self.win)
+                else:
+                    return None
    
         self.draw()
         return self
